@@ -23,7 +23,7 @@ KnowNative was originally created by Abigail Dawson, who now oversees the contin
 - [License](#license)
 - [Contact](#contact)
 
----
+----
 
 ## Contribute
 
