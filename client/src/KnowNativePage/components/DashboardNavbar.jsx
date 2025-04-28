@@ -41,6 +41,19 @@ const DashboardNavbar = ({ activeTab }) => {
               Dashboard
             </a>
           </li>
+          <li className={`dashboard-nav__nav-item${activeTab === 'TextPage' ? '--active' : ''}`}>
+            <a
+              className={`dashboard-nav__link dashboard-nav__link${activeTab === 'TextPage' ? '--active' : ''}`}
+              onClick={() => navigate('/text')}
+            >
+            <span
+              className={`material-symbols-outlined dashboard-nav__flipped dashboard-nav__nav-icon${activeTab === 'TextPage' ? '--active' : ''}`}
+            >
+            &#xe41d;
+            </span>
+            Study
+            </a>
+        </li>
           <li
             className={`dashboard-nav__nav-item${activeTab === 'Cards' ? '--active' : ''} dashboard-nav__nav-item--inactive`}>
             <a

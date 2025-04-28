@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import './App.scss';
-import DemoTextPage from './DemoPage/DemoTextPage';
+//import DemoTextPage from './DemoPage/DemoTextPage';
 import AboutPage from './LandingPages/AboutPage/AboutPage';
 import ContributePage from './LandingPages/ContributePage/ContributePage';
 import BlogPage from './LandingPages/BlogPage/BlogPage';
@@ -14,13 +14,15 @@ import AppProvider from './contexts/AppProvider';
 import SignupSuccessful from './KnowNativePage/SignupSuccessful/SignupSuccessful';
 import LoginSuccessful from './KnowNativePage/LoginSuccessful/LoginSuccessful';
 import AddTextPage from './KnowNativePage/AddTextPage/AddTextPage';
+import TextPage from './ProductPage/TextPage';
 
+//<Route path="/demo" element={<DemoTextPage />} />
 function App() {
   return (
     <AppProvider>
       <main className="App">
         <Routes>
-          <Route path="/demo" element={<DemoTextPage />} />
+          <Route path="/text" element={<TextPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contribute" element={<ContributePage />} />
           <Route path="/blog" element={<BlogPage />} />

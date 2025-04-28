@@ -3,7 +3,7 @@ import { useAuthContext } from '../../contexts/Auth/AuthProvider';
 import { Link, useNavigate } from 'react-router-dom';
 import FormInput from '../../LandingPages/components/Forms/FormInput/FormInput';
 import Button from '../../ui-components/Button/button';
-import sendRequest from '../../utilities/send-request';
+import { addNewText } from '../../utilities/texts-api';
 import './AddTextPage.scss';
 
 export default function AddTextPage() {
@@ -27,18 +27,13 @@ export default function AddTextPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = await sendRequest('/api/demo/texts', 'POST', formData, {
-        Authorization: `Bearer ${user.token}`
-      });
-  
-      console.log('Text added:', data);
-      // Temporarily redirecting to the dashboard after successfully adding a text.
+      await addNewText(formData);
       navigate('/dashboard');
-      console.log('Form submitted:', formData);
     } catch (error) {
       console.error('Oops! Error submitting form:', error);
     }
   };
+  
 
   async function handleLogOut() {
     try {

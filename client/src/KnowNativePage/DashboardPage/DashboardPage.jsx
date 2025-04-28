@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import { useAuthContext } from '../../contexts/Auth/AuthProvider';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../ui-components/Button/button';
-import { getUserTexts } from '../../utilities/texts-api';
+import { getUserTexts, deleteText } from '../../utilities/texts-api';
 import DashboardNavbar from '../components/DashboardNavbar';
 
+/*
 const mockData = [
   {
     _id: 1,
@@ -284,6 +285,7 @@ const mockData = [
     lastOpened: 'Feb 25, 2025'
   }
 ];
+*/
 
 export default function DashboardPage() {
   const { user } = useAuthContext();
@@ -296,6 +298,22 @@ export default function DashboardPage() {
 
   const [texts, setTexts] = useState([]);
   const [error, setError] = useState(null);
+  const lastOpenedText = texts[0]; 
+
+  const totalCards = texts.reduce((s, t) => s + (t.cardCount || (t.cards && t.cards.length) || 0), 0);
+  const totalTexts = texts.length;
+
+  const handleDelete = async (textId) => {
+    try {
+      await deleteText(user._id, textId);
+      setTexts((prev) => prev.filter((t) => t._id !== textId));
+    } catch (err) {
+      console.error('Error deleting text:', err);
+      alert('Delete failed – check server logs.');
+    }
+  };
+  
+
 
   const showMoreItems = (amount) => {
     setItemsToShow((prev) => prev + amount);
@@ -426,7 +444,7 @@ export default function DashboardPage() {
           <div className="dashboard__stat">
             <RoundIcon iconName="book_2" color="blue" />
             <div className="dashboard__stat__stat-info">
-              <h3 className="">21</h3>
+              <h3 className="">{totalTexts}</h3>
               <span className="dashboard__stat__label">Texts</span>
             </div>
           </div>
@@ -434,7 +452,7 @@ export default function DashboardPage() {
           <div className="dashboard__stat">
             <RoundIcon iconName="&#xe41d;" color="green" />
             <div className="dashboard__stat__stat-info">
-              <h3>154</h3>
+              <h3>{totalCards}</h3>
               <span className="dashboard__stat__label">Cards</span>
             </div>
           </div>
@@ -481,7 +499,7 @@ export default function DashboardPage() {
                   iconStyling="reusable-button__icon-flip"
                   buttonVariant="tertiary"
                   buttonText="Review"
-                  buttonOnClickFunc={() => console.log('click click')}
+                  buttonOnClickFunc={() => navigate('/text', { state: { text: lastOpenedText } })}
                 />
               </div>
             </div>
@@ -552,7 +570,8 @@ export default function DashboardPage() {
                         </span>
                       </span>
                     </th>
-                    <th></th>
+                    <th></th> {/* Trash icon header */}
+                    <th></th> {/* Review column header */}
                   </tr>
                 </thead>
                 <tbody>
@@ -569,8 +588,8 @@ export default function DashboardPage() {
                         <div className="dashboard__table-container__name">{item.title}</div>
                         <div className="dashboard__table-container__desc">{item.content}</div>
                       </td>
-                      <td className={item.cards.length === 0 ? 'dashboard--text-red' : ''}>
-                        {item.cards.length}
+                      <td className={(item.cardCount || (item.cards && item.cards.length) || 0) === 0 ? 'dashboard--text-red' : ''}>
+                        {item.cardCount || (item.cards && item.cards.length) || 0}
                       </td>
                       <td>{item.lastOpened}</td>
                       <td>
@@ -579,8 +598,16 @@ export default function DashboardPage() {
                           iconStyling="reusable-button__icon-flip"
                           buttonVariant="tertiary"
                           buttonText="Review"
-                          buttonOnClickFunc={() => console.log('click click')}
-                          disabled={item.cards.length === 0 ? true : false}
+                          buttonOnClickFunc={() => navigate('/text', { state: { text: item } })}
+                          disabled={item.cards.length}
+                        />
+                      </td>
+                      <td>
+                        <Button
+                          iconName="delete"
+                          buttonVariant="tertiary"
+                          buttonText=""
+                          buttonOnClickFunc={() => handleDelete(item._id)}
                         />
                       </td>
                     </tr>

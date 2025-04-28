@@ -24,6 +24,11 @@ app.use(
 //so that we parse the cookies that enter the server.
 app.use(cookieParser());
 
+app.use('/api', (_req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
+
 // Configure both serve-favicon & static middleware
 // to serve from the production 'dist' folder
 // app.use(favicon(path.join(__dirname, 'public/favicon.ico')));
@@ -59,3 +64,4 @@ app.listen(port, function () {
 });
 
 // test
+

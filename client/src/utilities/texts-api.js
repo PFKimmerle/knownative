@@ -9,24 +9,26 @@ export function getAll() {
   return sendRequest(`${BASE_URL}`)
 }
 
-export function addNewText(textData) {
-  return sendRequest(`${BASE_URL}/add`, 'POST', textData)
-}
+export const addNewText = (textData) =>
+  sendRequest('/api/demo/texts', 'POST', textData);
 
-export function deleteText(text, id) {
-  return sendRequest(`${BASE_URL}/${id}/delete`, 'DELETE', { text })
-}
+export const deleteText = (userId, textId) =>
+  sendRequest(`/api/texts/${userId}/text/${textId}`, 'DELETE');
+
 
 export function getText(id) {
   return sendRequest(`${BASE_URL}/${id}`)
 }
 
-export function saveWord(word, textId) {
-  return sendRequest(`${BASE_URL}/${textId}/save`, 'POST', { word })
-}
+export const saveWord = (wordObj, textId) =>
+  sendRequest(`${BASE_URL}/${textId}/save`, 'POST', {
+    chinese: wordObj.charGroup,
+    pinyin: wordObj.pinyin,
+    english: wordObj.meaning,
+  });
 
 export function getSavedWords(textId) {
-  return sendRequest(`${BASE_URL}/${textId}/get-saved-words`)
+  return sendRequest(`${BASE_URL}/${textId}/get-saved-words`);
 }
 
 export function translateSentence(sentence) {
